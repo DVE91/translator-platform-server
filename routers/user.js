@@ -25,11 +25,13 @@ router.get("/translators", async (req, res) => {
   const profiles = await Translator.findAndCountAll({
     limit,
     offset,
-    include: { model: User, attributes: ["fullName", "imageUrl"] },
-    include: {
-      model: Language,
-      attributes: ["originalLanguage", "nativeLanguage"],
-    },
+    include: [
+      { model: User, attributes: ["fullName", "imageUrl"] },
+      {
+        model: Language,
+        attributes: ["originalLanguage", "nativeLanguage"],
+      },
+    ],
   });
   res.status(200).send({ message: "success", profiles });
 });
@@ -63,42 +65,50 @@ router.post("/user/order", async (req, res) => {
     endDate,
   } = req.body;
 
-  const profile = await profile.findByPk(profileId);
+  try {
+    const profile = await Translator.findByPk(profileId);
 
-  if (profile === null) {
-    return res
-      .status(404)
-      .send({ message: "This translator profile does not exist" });
+    console.log("WAHATS ID>", profileId);
+    console.log("WHATS PROFILE?", profile);
+
+    if (profile === null) {
+      return res
+        .status(404)
+        .send({ message: "This translator profile does not exist" });
+    }
+
+    if (
+      !title ||
+      !type ||
+      !wordCount ||
+      !originalLanguage ||
+      !nativeLanguage ||
+      !originalDocument ||
+      !startingDate ||
+      !endDate
+    ) {
+      return res
+        .status(400)
+        .send({ message: "Please fill in all the required fields" });
+    }
+
+    const job = await Job.create({
+      profileId,
+      title,
+      type,
+      wordCount,
+      originalLanguage,
+      nativeLanguage,
+      originalDocument,
+      startingDate,
+      endDate,
+    });
+
+    return res.status(201).send({ message: "Job created", job });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
   }
-
-  if (
-    !title ||
-    !type ||
-    !wordCount ||
-    !originalLanguage ||
-    !nativeLanguage ||
-    !originalDocument ||
-    !startingDate ||
-    !endDate
-  ) {
-    return res
-      .status(400)
-      .send({ message: "Please fill in all the required fields" });
-  }
-
-  const job = await Job.create({
-    profileId,
-    title,
-    type,
-    wordCount,
-    originalLanguage,
-    nativeLanguage,
-    originalDocument,
-    startingDate,
-    endDate,
-  });
-
-  return res.status(201).send({ message: "Job created", job });
 });
 
 module.exports = router;

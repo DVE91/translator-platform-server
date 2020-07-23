@@ -12,6 +12,13 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: 2,
+          experience: "I got loads of translation experience",
+          writingStyle: "Classic, professional",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
