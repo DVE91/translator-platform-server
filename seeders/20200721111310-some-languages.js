@@ -7,12 +7,18 @@ module.exports = {
       [
         {
           originalLanguage: "Dutch",
+          nativeLanguage: "Dutch",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          originalLanguage: "English (UK)",
           nativeLanguage: "English (UK)",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          originalLanguage: "Dutch",
+          originalLanguage: "English (American)",
           nativeLanguage: "English (American)",
           createdAt: new Date(),
           updatedAt: new Date(),

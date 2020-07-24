@@ -11,6 +11,12 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          profileId: 2,
+          languageId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
