@@ -37,19 +37,19 @@ router.get("/translators", async (req, res) => {
 });
 
 //get all jobs based on profile Id
-// router.get("/user/:id/jobs", async (req, res) => {
-//   const { id } = req.params;
+router.get("/user/:id/jobs", async (req, res) => {
+  const { id } = req.params;
 
-//   console.log(id);
-//   if (isNaN(parseInt(id))) {
-//     return res.status(400).send({ message: "Profile id is not a number" });
-//   }
-//   const jobs = await Job.findAll({
-//     where: {profileId: id},
-//   });
+  console.log(id);
+  if (isNaN(parseInt(id))) {
+    return res.status(400).send({ message: "Profile id is not a number" });
+  }
+  const jobs = await Job.findAll({
+    where: { profileId: id },
+  });
 
-//   res.status(200).send({ message: "ok", jobs });
-// });
+  res.status(200).send({ message: "ok", jobs });
+});
 
 //create a new job in the database
 router.post("/user/order", async (req, res) => {
