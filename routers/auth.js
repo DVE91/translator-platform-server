@@ -110,7 +110,7 @@ router.post("/signup/translator", async (req, res) => {
 });
 
 // The /me endpoint can be used to:
-// - get the users email & name using only their token
+// - get the user information using only their token
 // - checking if a token is (still) valid
 router.get("/me", authMiddleware, async (req, res) => {
   // don't send back the password hash
