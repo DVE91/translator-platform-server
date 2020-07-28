@@ -27,6 +27,26 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          fullName: "Joe",
+          emailAddress: "test@m.com",
+          password: bcrypt.hashSync(myPassword, 10),
+          imageUrl:
+            "https://previews.123rf.com/images/burlingham/burlingham1310/burlingham131000159/22665059-handsome-young-black-man-smiling-horizontal.jpg",
+          isTranslator: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          fullName: "Dee",
+          emailAddress: "dee@test.com",
+          password: bcrypt.hashSync("dee", 10),
+          imageUrl:
+            "https://miro.medium.com/max/1200/1*pHb0M9z_UMhO22HlaOl2zw.jpeg",
+          isTranslator: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

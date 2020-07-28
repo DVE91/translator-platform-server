@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("profileLanguages", {
+    await queryInterface.createTable("profileTranslationSkills", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,10 +17,10 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      languageId: {
+      translationSkillId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "languages",
+          model: "translationSkills",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -37,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("profileLanguages");
+    await queryInterface.dropTable("profileTranslationSkills");
   },
 };

@@ -3,17 +3,23 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "profileLanguages",
+      "translationSkills",
       [
         {
-          profileId: 1,
-          languageId: 2,
+          originalLanguageId: 1,
+          nativeLanguageId: 4,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          profileId: 2,
-          languageId: 3,
+          originalLanguageId: 6,
+          nativeLanguageId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          originalLanguageId: 1,
+          nativeLanguageId: 3,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -23,6 +29,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("profileLanguages", null, {});
+    return queryInterface.bulkDelete("languages", null, {});
   },
 };

@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Language = require("../models").language;
+
 const Profile = require("../models").profile;
 const User = require("../models").user;
 
@@ -12,7 +13,6 @@ router.get("/languages", async (req, res) => {
   const languages = await Language.findAndCountAll({
     limit,
     offset,
-    attributes: ["originalLanguage", "nativeLanguage"],
   });
   res.status(200).send({ message: "success", languages });
 });
@@ -24,13 +24,7 @@ router.get("/translators", async (req, res) => {
   const profiles = await Profile.findAndCountAll({
     limit,
     offset,
-    include: [
-      { model: User, attributes: ["fullName", "imageUrl"] },
-      {
-        model: Language,
-        attributes: ["originalLanguage", "nativeLanguage"],
-      },
-    ],
+    include: [{ model: User, attributes: ["fullName", "imageUrl"] }],
   });
   res.status(200).send({ message: "success", profiles });
 });
