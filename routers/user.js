@@ -64,31 +64,84 @@ router.post("/user/order", async (req, res) => {
   }
 });
 
-//get all jobs based on profile Id
+//get all profile info based on user Id
+router.get("/user/:id/profile", auth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const profile = await Profile.findByPk(id);
+
+    if (profile === null) {
+      return res.status(404).send({ message: "This profile does not exist" });
+    }
+
+    if (!profile.userId === id) {
+      return res
+        .status(403)
+        .send({ message: "You are not authorized to view this." });
+    }
+
+    if (isNaN(parseInt(id))) {
+      return res.status(400).send({ message: "Profile id is not a number" });
+    }
+
+    res.status(200).send({ message: "ok", profile });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//get all jobs based on user Id
 router.get("/user/:id/jobs", auth, async (req, res) => {
   const { id } = req.params;
-  const profile = await Profile.findByPk(id);
-  console.log("whats profile?", profile);
+  try {
+    const profile = await Profile.findByPk(id);
 
-  if (profile === null) {
-    return res.status(404).send({ message: "This profile does not exist" });
+    if (profile === null) {
+      return res.status(404).send({ message: "This profile does not exist" });
+    }
+
+    if (!profile.userId === id) {
+      return res
+        .status(403)
+        .send({ message: "You are not authorized to view this." });
+    }
+
+    if (isNaN(parseInt(id))) {
+      return res.status(400).send({ message: "Profile id is not a number" });
+    }
+
+    const jobs = await Job.findAll({
+      where: { profileId: id },
+    });
+
+    res.status(200).send({ message: "ok", jobs });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
   }
+});
 
-  if (!profile.userId === id) {
-    return res
-      .status(403)
-      .send({ message: "You are not authorized to view this." });
+//update translated document in specific job
+router.patch("/user/:userId/jobs/:jobId", auth, async (req, res) => {
+  const { userId, jobId } = req.params;
+  try {
+    const toBeUpdatedJob = await Job.findByPk(jobId);
+
+    if (toBeUpdatedJob === null) {
+      return res.status(404).send({ message: "Job not found." });
+    }
+    await toBeUpdatedJob.update({ ...req.body });
+
+    const jobs = await Job.findAll({
+      where: { profileId: userId },
+    });
+
+    return res.status(200).send({ message: "success!", jobs });
+  } catch (error) {
+    console.log("here?", error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
   }
-
-  if (isNaN(parseInt(id))) {
-    return res.status(400).send({ message: "Profile id is not a number" });
-  }
-
-  const jobs = await Job.findAll({
-    where: { profileId: id },
-  });
-
-  res.status(200).send({ message: "ok", jobs });
 });
 
 module.exports = router;
