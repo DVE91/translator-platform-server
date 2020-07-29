@@ -129,10 +129,10 @@ router.get("/user/:id/jobs", auth, async (req, res) => {
 router.get("/user/:id/skills", auth, async (req, res) => {
   const { id } = req.params;
   try {
-    const profile = await Profile.findOne({
+    const profileforId = await Profile.findOne({
       where: { userId: id },
     });
-    const profileId = profile.dataValues.id;
+    const profileId = profileforId.dataValues.id;
 
     if (!profileId === id) {
       return res
@@ -140,11 +140,21 @@ router.get("/user/:id/skills", auth, async (req, res) => {
         .send({ message: "You are not authorized to view this." });
     }
 
-    const jobs = await Job.findAll({
-      where: { profileId },
+    const skillQuery = await Profile.findByPk(profileId, {
+      include: [
+        {
+          model: Skill, //here we include the translation skills for the profile
+          include: [
+            { model: Language, as: "originalLanguage" },
+            { model: Language, as: "nativeLanguage" },
+          ], //I dont remember the keys exactly, but with the translation skills we include the actual languages
+        },
+      ],
     });
 
-    res.status(200).send({ message: "ok", jobs });
+    const skills = skillQuery.dataValues.translationSkills;
+
+    res.status(200).send({ message: "ok", skills });
   } catch (error) {
     console.log(error);
     return res.status(400).send({ message: "ERROR something went wrong" });
