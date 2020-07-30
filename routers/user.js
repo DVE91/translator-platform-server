@@ -4,6 +4,7 @@ const Language = require("../models").language;
 const Profile = require("../models").profile;
 const User = require("../models").user;
 const Job = require("../models").job;
+const Finance = require("../models").finance;
 const Skill = require("../models").translationSkill;
 const ProfileSkill = require("../models").profileTranslationSkills;
 
@@ -78,13 +79,6 @@ router.get("/user/:id/profile", auth, async (req, res) => {
     if (profile === null) {
       return res.status(404).send({ message: "This profile does not exist" });
     }
-
-    if (!profileId === id) {
-      return res
-        .status(403)
-        .send({ message: "You are not authorized to view this." });
-    }
-
     if (isNaN(parseInt(id))) {
       return res.status(400).send({ message: "id is not a number" });
     }
@@ -95,6 +89,57 @@ router.get("/user/:id/profile", auth, async (req, res) => {
     return res.status(400).send({ message: "ERROR something went wrong" });
   }
 });
+
+//get all finance info based on user Id
+router.get("/user/:id/finance", auth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const profile = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profile.dataValues.id;
+
+    if (profile === null) {
+      return res.status(404).send({ message: "This profile does not exist" });
+    }
+    const finances = await Finance.findOne({
+      where: { profileId },
+    });
+
+    res.status(200).send({ message: "ok", finances });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//update specific finance row with cents per word
+///user/${userId}/finance/:financeId
+router.patch("/user/:userId/finance/:financeId", auth, async (req, res) => {
+  const { userId, financeId } = req.params;
+  try {
+    const toBeUpdatedFinance = await Finance.findByPk(financeId);
+    const profile = await Profile.findOne({
+      where: { userId },
+    });
+    const profileId = profile.dataValues.id;
+
+    if (toBeUpdatedFinance === null) {
+      return res.status(404).send({ message: "Finance information not found." });
+    }
+    await toBeUpdatedFinance.update({ ...req.body });
+
+    const finances = await Finance.findOne({
+      where: { profileId },
+    });
+
+    return res.status(200).send({ message: "success!", finances });
+  } catch (error) {
+    console.log("error", error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
 
 //get all jobs based on user Id
 router.get("/user/:id/jobs", auth, async (req, res) => {
@@ -108,13 +153,6 @@ router.get("/user/:id/jobs", auth, async (req, res) => {
     if (profile === null) {
       return res.status(404).send({ message: "This profile does not exist" });
     }
-
-    if (!profileId === id) {
-      return res
-        .status(403)
-        .send({ message: "You are not authorized to view this." });
-    }
-
     const jobs = await Job.findAll({
       where: { profileId },
     });
@@ -135,20 +173,17 @@ router.post("/user/:id/skills", auth, async (req, res) => {
       where: { userId: id },
     });
     const profileId = profileforId.dataValues.id;
-    if (!profileId === id) {
-      return res
-        .status(403)
-        .send({ message: "You are not authorized to do this." });
-    }
+
     const originalLanguageforId = await Language.findOne({
       where: { title: originalLanguage },
     });
     const nativeLanguageforId = await Language.findOne({
       where: { title: nativeLanguage },
     });
+
     const originalLanguageId = originalLanguageforId.dataValues.id;
     const nativeLanguageId = nativeLanguageforId.dataValues.id;
-    console.log(originalLanguageId, nativeLanguageId);
+
     const translationSkill = await Skill.create({
       originalLanguageId,
       nativeLanguageId,
@@ -262,7 +297,7 @@ router.patch("/user/:userId/jobs/:jobId", auth, async (req, res) => {
 
     return res.status(200).send({ message: "success!", jobs });
   } catch (error) {
-    console.log("here?", error);
+    console.log("error", error);
     return res.status(400).send({ message: "ERROR something went wrong" });
   }
 });
