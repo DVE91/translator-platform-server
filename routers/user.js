@@ -5,6 +5,7 @@ const Profile = require("../models").profile;
 const User = require("../models").user;
 const Job = require("../models").job;
 const Skill = require("../models").translationSkill;
+const ProfileSkill = require("../models").profileTranslationSkills;
 
 const router = new Router();
 
@@ -125,7 +126,58 @@ router.get("/user/:id/jobs", auth, async (req, res) => {
   }
 });
 
-//get all skills based on user Id
+//create new translation skill
+router.post("/user/:id/skills", auth, async (req, res) => {
+  const { id } = req.params;
+  const { originalLanguage, nativeLanguage } = req.body;
+  try {
+    const profileforId = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profileforId.dataValues.id;
+    if (!profileId === id) {
+      return res
+        .status(403)
+        .send({ message: "You are not authorized to do this." });
+    }
+    const originalLanguageforId = await Language.findOne({
+      where: { title: originalLanguage },
+    });
+    const nativeLanguageforId = await Language.findOne({
+      where: { title: nativeLanguage },
+    });
+    const originalLanguageId = originalLanguageforId.dataValues.id;
+    const nativeLanguageId = nativeLanguageforId.dataValues.id;
+    console.log(originalLanguageId, nativeLanguageId);
+    const translationSkill = await Skill.create({
+      originalLanguageId,
+      nativeLanguageId,
+    });
+    await ProfileSkill.create({
+      profileId,
+      translationSkillId: translationSkill.dataValues.id,
+    });
+
+    const skillQuery = await Profile.findByPk(profileId, {
+      include: [
+        {
+          model: Skill,
+          include: [
+            { model: Language, as: "originalLanguage" },
+            { model: Language, as: "nativeLanguage" },
+          ],
+        },
+      ],
+    });
+    const skills = skillQuery.dataValues.translationSkills;
+    res.status(200).send({ message: "ok", skills });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//get all translation skills based on user Id
 router.get("/user/:id/skills", auth, async (req, res) => {
   const { id } = req.params;
   try {
@@ -147,7 +199,7 @@ router.get("/user/:id/skills", auth, async (req, res) => {
           include: [
             { model: Language, as: "originalLanguage" },
             { model: Language, as: "nativeLanguage" },
-          ], //I dont remember the keys exactly, but with the translation skills we include the actual languages
+          ],
         },
       ],
     });
@@ -155,6 +207,34 @@ router.get("/user/:id/skills", auth, async (req, res) => {
     const skills = skillQuery.dataValues.translationSkills;
 
     res.status(200).send({ message: "ok", skills });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//delete skill by skillId
+router.delete("/user/:id/skills/:skillId", auth, async (req, res) => {
+  const { id, skillId } = req.params;
+  try {
+    const profileforId = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profileforId.dataValues.id;
+
+    if (!profileId === id) {
+      return res
+        .status(403)
+        .send({ message: "You are not authorized to do this." });
+    }
+
+    const toDelete = await Skill.findByPk(skillId);
+    if (!toDelete) {
+      res.status(404).send("Translation skillset not found");
+    } else {
+      const deleted = await toDelete.destroy();
+      res.status(200).send({ message: "ok", deleted });
+    }
   } catch (error) {
     console.log(error);
     return res.status(400).send({ message: "ERROR something went wrong" });
