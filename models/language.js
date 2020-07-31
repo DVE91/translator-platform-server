@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const translationSkill = require("./translationSkill");
 module.exports = (sequelize, DataTypes) => {
   class language extends Model {
     /**
@@ -8,16 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsToMany(models.profile, {
-        through: "profileLanguages",
-        foreignKey: "languageId",
+      this.belongsToMany(models.language, {
+        through: "translationSkills",
+        foreignKey: "originalLanguageId",
+        as: "originalLanguage",
+      });
+      this.belongsToMany(models.language, {
+        through: "translationSkills",
+        foreignKey: "nativeLanguageId",
+        as: "nativeLanguage",
       });
     }
   }
   language.init(
     {
-      originalLanguage: DataTypes.STRING,
-      nativeLanguage: DataTypes.STRING,
+      title: DataTypes.STRING,
     },
     {
       sequelize,
@@ -26,3 +32,21 @@ module.exports = (sequelize, DataTypes) => {
   );
   return language;
 };
+
+//language.belon...
+// this.belongsToMany(models.language, {
+//   through: "translationSkill",
+//   foreignKey: "originalLanguageId",
+//   as: "original"
+// })
+
+// this.belongsToMany(models.language, {
+//   through: "translationSkill",
+//   foreignKey: "nativeLanguageId",
+//   as: "native"
+// })
+
+// translationSkill.belongsToMany(models.translationSkill, {
+//   through: "profileTranslationSkills",
+//   foreignKey: "profileId",
+// });

@@ -29,11 +29,11 @@ module.exports = {
         allowNull: false,
       },
       originalDocument: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       translatedDocument: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       submitted: {
         type: Sequelize.BOOLEAN,

@@ -4,6 +4,7 @@ const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
 const Profile = require("../models").profile;
+const Finance = require("../models").finance;
 const { SALT_ROUNDS } = require("../config/constants");
 
 const router = new Router();
@@ -36,16 +37,16 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { email, password, name } = req.body;
-  if (!email || !password || !name) {
+  const { fullName, emailAddress, password } = req.body;
+  if (!fullName || !emailAddress || !password) {
     return res.status(400).send("Please provide an email, password and a name");
   }
 
   try {
     const newUser = await User.create({
-      email,
+      fullName,
+      emailAddress,
       password: bcrypt.hashSync(password, SALT_ROUNDS),
-      name,
       isTranslator: false,
     });
 
@@ -87,10 +88,14 @@ router.post("/signup/translator", async (req, res) => {
       isTranslator: true,
     });
 
-    await Profile.create({
+    const profile = await Profile.create({
       experience,
       writingStyle,
       userId: newUser.id,
+    });
+
+    await Finance.create({
+      profileId: profile.dataValues.id,
     });
 
     delete newUser.dataValues["password"]; // don't send back the password hash

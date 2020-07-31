@@ -3,23 +3,35 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      "languages",
+      "translationSkills",
       [
         {
-          originalLanguage: "Dutch",
-          nativeLanguage: "Dutch",
+          originalLanguageId: 1,
+          nativeLanguageId: 4,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          originalLanguage: "English (UK)",
-          nativeLanguage: "English (UK)",
+          originalLanguageId: 6,
+          nativeLanguageId: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          originalLanguage: "English (American)",
-          nativeLanguage: "English (American)",
+          originalLanguageId: 1,
+          nativeLanguageId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          originalLanguageId: 1,
+          nativeLanguageId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          originalLanguageId: 1,
+          nativeLanguageId: 5,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

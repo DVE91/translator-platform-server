@@ -19,6 +19,21 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: 4,
+          experience: "I love writing fan fics",
+          writingStyle: "Whimsical, fantastic",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: 5,
+          experience:
+            "I worked for a publisher as an editor for 5 years. Now I'm a freelancer.",
+          writingStyle: "I love a dramatic, bold and descriptive text",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

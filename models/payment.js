@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class profileLanguages extends Model {
+  class payment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,18 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.profile);
-      this.belongsTo(models.language);
+      this.hasOne(models.job);
+      this.belongsTo(models.user);
     }
   }
-  profileLanguages.init(
+  payment.init(
     {
-      profileId: DataTypes.INTEGER,
-      languageId: DataTypes.INTEGER,
+      totalPrice: DataTypes.FLOAT,
+      paid: DataTypes.BOOLEAN,
     },
     {
       sequelize,
-      modelName: "profileLanguages",
+      modelName: "payment",
     }
   );
-  return profileLanguages;
+  return payment;
 };

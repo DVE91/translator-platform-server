@@ -20,9 +20,39 @@ module.exports = {
         {
           fullName: "Jane",
           emailAddress: "test@mail.com",
-          password: bcrypt.hashSync(myPassword, 10),
+          password: bcrypt.hashSync("jane", 10),
           imageUrl:
             "https://image.shutterstock.com/image-photo/headshot-portrait-happy-ginger-girl-260nw-623804987.jpg",
+          isTranslator: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          fullName: "Joe",
+          emailAddress: "test@m.com",
+          password: bcrypt.hashSync("joe", 10),
+          imageUrl:
+            "https://previews.123rf.com/images/burlingham/burlingham1310/burlingham131000159/22665059-handsome-young-black-man-smiling-horizontal.jpg",
+          isTranslator: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          fullName: "Dee",
+          emailAddress: "dee@test.com",
+          password: bcrypt.hashSync("dee", 10),
+          imageUrl:
+            "https://miro.medium.com/max/1200/1*pHb0M9z_UMhO22HlaOl2zw.jpeg",
+          isTranslator: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          fullName: "Eve",
+          emailAddress: "eve@test.com",
+          password: bcrypt.hashSync("eve", 10),
+          imageUrl:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1UAAg4XKlbZm-q7MjaWa7BjYfvVMNfVxYaQ&usqp=CAU",
           isTranslator: true,
           createdAt: new Date(),
           updatedAt: new Date(),

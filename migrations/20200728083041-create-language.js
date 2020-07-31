@@ -8,10 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      originalLanguage: {
-        type: Sequelize.STRING
-      },
-      nativeLanguage: {
+      title: {
         type: Sequelize.STRING
       },
       createdAt: {

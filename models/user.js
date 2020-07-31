@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasOne(models.profile);
+      this.hasMany(models.payment);
     }
   }
   user.init(

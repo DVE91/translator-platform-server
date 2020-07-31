@@ -10,10 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.user);
       this.hasMany(models.job);
-      this.belongsToMany(models.language, {
-        through: "profileLanguages",
+      this.belongsToMany(models.translationSkill, {
+        through: "profileTranslationSkills",
         foreignKey: "profileId",
       });
+      this.hasOne(models.finance);
+      this.hasMany(models.payment);
     }
   }
   profile.init(
