@@ -64,8 +64,6 @@ router.get("/pricing", async (req, res) => {
     const profile = await Profile.findByPk(profileId, {
       include: [{ model: Finance, attributes: ["centsPerWord"] }],
     });
-
-    console.log("SUCES?", profile.finance);
     res.status(200).send({ message: "success", pricing: profile.finance });
   } catch (error) {
     console.log(error);

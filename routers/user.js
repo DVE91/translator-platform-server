@@ -5,6 +5,7 @@ const Profile = require("../models").profile;
 const User = require("../models").user;
 const Job = require("../models").job;
 const Finance = require("../models").finance;
+const Payment = require("../models").payment;
 const Skill = require("../models").translationSkill;
 const ProfileSkill = require("../models").profileTranslationSkills;
 
@@ -22,6 +23,11 @@ router.post("/user/order", async (req, res) => {
     originalDocument,
     startingDate,
     endDate,
+    id,
+    fullName,
+    emailAddress,
+    paid,
+    totalPrice,
   } = req.body;
 
   try {
@@ -41,15 +47,42 @@ router.post("/user/order", async (req, res) => {
       !nativeLanguage ||
       !originalDocument ||
       !startingDate ||
-      !endDate
+      !endDate ||
+      !fullName ||
+      !emailAddress ||
+      !paid
     ) {
       return res
         .status(400)
         .send({ message: "Please fill in all the required fields" });
     }
 
+    let newUser;
+    let newPayment;
+    if (!id) {
+      newUser = await User.create({
+        fullName,
+        emailAddress,
+        isTranslator: false,
+      });
+      newPayment = await Payment.create({
+        userId: newUser.id,
+        profileId,
+        totalPrice,
+        paid,
+      });
+    } else {
+      newPayment = await Payment.create({
+        userId: id,
+        profileId,
+        totalPrice,
+        paid,
+      });
+    }
+
     const job = await Job.create({
       profileId,
+      paymentId: newPayment.id,
       title,
       type,
       wordCount,
@@ -74,7 +107,6 @@ router.get("/user/:id/profile", auth, async (req, res) => {
     const profile = await Profile.findOne({
       where: { userId: id },
     });
-    const profileId = profile.dataValues.id;
 
     if (profile === null) {
       return res.status(404).send({ message: "This profile does not exist" });
@@ -114,7 +146,6 @@ router.get("/user/:id/finance", auth, async (req, res) => {
 });
 
 //update specific finance row with cents per word
-///user/${userId}/finance/:financeId
 router.patch("/user/:userId/finance/:financeId", auth, async (req, res) => {
   const { userId, financeId } = req.params;
   try {
@@ -125,7 +156,9 @@ router.patch("/user/:userId/finance/:financeId", auth, async (req, res) => {
     const profileId = profile.dataValues.id;
 
     if (toBeUpdatedFinance === null) {
-      return res.status(404).send({ message: "Finance information not found." });
+      return res
+        .status(404)
+        .send({ message: "Finance information not found." });
     }
     await toBeUpdatedFinance.update({ ...req.body });
 
@@ -139,7 +172,6 @@ router.patch("/user/:userId/finance/:financeId", auth, async (req, res) => {
     return res.status(400).send({ message: "ERROR something went wrong" });
   }
 });
-
 
 //get all jobs based on user Id
 router.get("/user/:id/jobs", auth, async (req, res) => {
@@ -155,11 +187,51 @@ router.get("/user/:id/jobs", auth, async (req, res) => {
     }
     const jobs = await Job.findAll({
       where: { profileId },
+      include: [
+        {
+          model: Payment,
+          attributes: ["totalPrice"],
+          include: { model: User, attributes: ["fullName", "emailAddress"] },
+        },
+      ],
     });
 
     res.status(200).send({ message: "ok", jobs });
   } catch (error) {
     console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//update translated document in specific job
+router.patch("/user/:userId/jobs/:jobId", auth, async (req, res) => {
+  const { userId, jobId } = req.params;
+  try {
+    const toBeUpdatedJob = await Job.findByPk(jobId);
+    const profile = await Profile.findOne({
+      where: { userId },
+    });
+    const profileId = profile.dataValues.id;
+
+    if (toBeUpdatedJob === null) {
+      return res.status(404).send({ message: "Job not found." });
+    }
+    await toBeUpdatedJob.update({ ...req.body });
+
+    const jobs = await Job.findAll({
+      where: { profileId },
+      include: [
+        {
+          model: Payment,
+          attributes: ["totalPrice"],
+          include: { model: User, attributes: ["fullName", "emailAddress"] },
+        },
+      ],
+    });
+
+    return res.status(200).send({ message: "success!", jobs });
+  } catch (error) {
+    console.log("error", error);
     return res.status(400).send({ message: "ERROR something went wrong" });
   }
 });
@@ -230,7 +302,7 @@ router.get("/user/:id/skills", auth, async (req, res) => {
     const skillQuery = await Profile.findByPk(profileId, {
       include: [
         {
-          model: Skill, //here we include the translation skills for the profile
+          model: Skill,
           include: [
             { model: Language, as: "originalLanguage" },
             { model: Language, as: "nativeLanguage" },
@@ -272,32 +344,6 @@ router.delete("/user/:id/skills/:skillId", auth, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res.status(400).send({ message: "ERROR something went wrong" });
-  }
-});
-
-//update translated document in specific job
-router.patch("/user/:userId/jobs/:jobId", auth, async (req, res) => {
-  const { userId, jobId } = req.params;
-  try {
-    const toBeUpdatedJob = await Job.findByPk(jobId);
-    const profile = await Profile.findOne({
-      where: { userId },
-    });
-    const profileId = profile.dataValues.id;
-
-    if (toBeUpdatedJob === null) {
-      return res.status(404).send({ message: "Job not found." });
-    }
-    await toBeUpdatedJob.update({ ...req.body });
-
-    const jobs = await Job.findAll({
-      where: { profileId },
-    });
-
-    return res.status(200).send({ message: "success!", jobs });
-  } catch (error) {
-    console.log("error", error);
     return res.status(400).send({ message: "ERROR something went wrong" });
   }
 });

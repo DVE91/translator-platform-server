@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.profile);
-      this.hasOne(models.payment);
+      this.belongsTo(models.payment);
     }
   }
   job.init(
@@ -35,10 +35,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       originalDocument: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
-      translatedDocument: DataTypes.STRING,
+      translatedDocument: DataTypes.TEXT,
       submitted: DataTypes.BOOLEAN,
       startingDate: {
         type: DataTypes.DATEONLY,

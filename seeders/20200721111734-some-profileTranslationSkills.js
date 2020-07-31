@@ -23,6 +23,18 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          profileId: 2,
+          translationSkillId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          profileId: 1,
+          translationSkillId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

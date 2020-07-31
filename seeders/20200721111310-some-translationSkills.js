@@ -23,6 +23,18 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          originalLanguageId: 1,
+          nativeLanguageId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          originalLanguageId: 1,
+          nativeLanguageId: 5,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

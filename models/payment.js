@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.profile);
-      this.belongsTo(models.job);
+      this.hasOne(models.job);
       this.belongsTo(models.user);
     }
   }
