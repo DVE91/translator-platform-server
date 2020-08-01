@@ -1,10 +1,12 @@
 const { Router } = require("express");
 const auth = require("../auth/middleware");
+const { Op } = require("sequelize");
 const Language = require("../models").language;
 const Profile = require("../models").profile;
 const User = require("../models").user;
 const Job = require("../models").job;
 const Finance = require("../models").finance;
+const Availability = require("../models").availability;
 const Payment = require("../models").payment;
 const Skill = require("../models").translationSkill;
 const ProfileSkill = require("../models").profileTranslationSkills;
@@ -122,9 +124,81 @@ router.get("/user/:id/profile", auth, async (req, res) => {
   }
 });
 
+//get all available working dates based on user Id
+router.get("/user/:id/availability", auth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const profile = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profile.dataValues.id;
+
+    if (profile === null) {
+      return res.status(404).send({ message: "This profile does not exist" });
+    }
+    const availability = await Availability.findAll({
+      where: { profileId },
+    });
+
+    res.status(200).send({ message: "ok", availability });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//update all available working dates based on user Id
+router.post("/user/:id/availability/", auth, async (req, res) => {
+  const { id } = req.params;
+  const date = req.body.dates;
+
+  try {
+    const profile = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profile.dataValues.id;
+
+    if (profile === null) {
+      return res.status(404).send({ message: "This profile does not exist" });
+    }
+
+    const availability = await Availability.create({
+      profileId,
+      date,
+    });
+
+    res.status(200).send({ message: "ok", availability });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
+//clear availability based on userID
+router.delete("/user/:id/availability", auth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const profileforId = await Profile.findOne({
+      where: { userId: id },
+    });
+    const profileId = profileforId.dataValues.id;
+
+    const deleted = await Availability.destroy({
+      where: {
+        profileId,
+      },
+    });
+    res.status(200).send({ message: "ok", deleted });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "ERROR something went wrong" });
+  }
+});
+
 //get all finance info based on user Id
 router.get("/user/:id/finance", auth, async (req, res) => {
   const { id } = req.params;
+
   try {
     const profile = await Profile.findOne({
       where: { userId: id },
