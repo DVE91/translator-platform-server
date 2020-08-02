@@ -5,6 +5,7 @@ const Language = require("../models").language;
 const Skill = require("../models").translationSkill;
 const Profile = require("../models").profile;
 const Finance = require("../models").finance;
+const Availability = require("../models").availability;
 const User = require("../models").user;
 
 const router = new Router();
@@ -38,6 +39,7 @@ router.get("/translators", async (req, res) => {
       include: [
         { model: User, attributes: ["fullName", "imageUrl"] },
         { model: Finance, attributes: ["centsPerWord"] },
+        { model: Availability, attributes: ["date"], raw: true },
         {
           model: Skill,
           where: {

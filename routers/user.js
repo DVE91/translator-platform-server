@@ -150,7 +150,7 @@ router.get("/user/:id/availability", auth, async (req, res) => {
 //update all available working dates based on user Id
 router.post("/user/:id/availability/", auth, async (req, res) => {
   const { id } = req.params;
-  const date = req.body.dates;
+  const { dates } = req.body;
 
   try {
     const profile = await Profile.findOne({
@@ -162,12 +162,14 @@ router.post("/user/:id/availability/", auth, async (req, res) => {
       return res.status(404).send({ message: "This profile does not exist" });
     }
 
-    const availability = await Availability.create({
-      profileId,
-      date,
-    });
-
-    res.status(200).send({ message: "ok", availability });
+    await dates.map((date) =>
+      Availability.create({
+        profileId,
+        date,
+      })
+    )
+    
+    res.status(200).send({ message: "ok", id });
   } catch (error) {
     console.log(error);
     return res.status(400).send({ message: "ERROR something went wrong" });
