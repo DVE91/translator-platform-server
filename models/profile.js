@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.hasOne(models.finance);
       this.hasMany(models.payment);
+      this.hasMany(models.availability);
     }
   }
   profile.init(
