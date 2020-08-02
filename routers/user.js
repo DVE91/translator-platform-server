@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const auth = require("../auth/middleware");
-const { Op } = require("sequelize");
 const Language = require("../models").language;
 const Profile = require("../models").profile;
 const User = require("../models").user;
@@ -167,8 +166,8 @@ router.post("/user/:id/availability/", auth, async (req, res) => {
         profileId,
         date,
       })
-    )
-    
+    );
+
     res.status(200).send({ message: "ok", id });
   } catch (error) {
     console.log(error);

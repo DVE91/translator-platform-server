@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const { Op } = require("sequelize");
-const finance = require("../models/finance");
 const Language = require("../models").language;
 const Skill = require("../models").translationSkill;
 const Profile = require("../models").profile;
