@@ -25,26 +25,6 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
-          title: "Hongarian",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          title: "Italian",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          title: "German",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          title: "Greek",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
       ],
       {}
     );

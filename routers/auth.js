@@ -9,6 +9,7 @@ const { SALT_ROUNDS } = require("../config/constants");
 
 const router = new Router();
 
+//signing in (both translator and customer)
 router.post("/login", async (req, res, next) => {
   try {
     const { emailAddress, password } = req.body;
@@ -36,6 +37,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+//signup for customer
 router.post("/signup", async (req, res) => {
   const { fullName, emailAddress, password } = req.body;
   if (!fullName || !emailAddress || !password) {
@@ -66,6 +68,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+//signup for translator
 router.post("/signup/translator", async (req, res) => {
   const {
     fullName,

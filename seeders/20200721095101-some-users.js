@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const myPassword = "test";
 ("use strict");
 
 module.exports = {
@@ -10,7 +9,7 @@ module.exports = {
         {
           fullName: "John",
           emailAddress: "testmail@mail.com",
-          password: bcrypt.hashSync(myPassword, 10),
+          password: bcrypt.hashSync("john", 10),
           imageUrl:
             "https://image.shutterstock.com/mosaic_250/1849259/575234476/stock-photo-good-looking-man-in-glasses-portrait-575234476.jpg",
           isTranslator: true,
@@ -53,6 +52,16 @@ module.exports = {
           password: bcrypt.hashSync("eve", 10),
           imageUrl:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1UAAg4XKlbZm-q7MjaWa7BjYfvVMNfVxYaQ&usqp=CAU",
+          isTranslator: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          fullName: "Nick",
+          emailAddress: "nick@test.com",
+          password: bcrypt.hashSync("nick", 10),
+          imageUrl:
+            "https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg",
           isTranslator: true,
           createdAt: new Date(),
           updatedAt: new Date(),

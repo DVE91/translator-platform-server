@@ -7,15 +7,16 @@ module.exports = {
       [
         {
           profileId: 1,
+          paymentId: 1,
           title: "5 leukste steden in Noord-Italië",
           type: "blogpost",
-          wordCount: 820,
+          wordCount: 6,
           originalLanguage: "Dutch",
           nativeLanguage: "Engels (UK)",
           originalDocument: "Ontdek Verona, Piemonte, Friuli en meer!",
           translatedDocument: "Discover Verona, Piemonte, Friuli and more!",
           submitted: false,
-          startingDate: new Date(2020, 8, 15),
+          startingDate: new Date(2020, 8, 10),
           endDate: new Date(2020, 8, 16),
           createdAt: new Date(),
           updatedAt: new Date(),

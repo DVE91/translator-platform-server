@@ -34,6 +34,14 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: 6,
+          experience:
+            "Not a lot of experience, but I make up in enthusiasm and passion for language.",
+          writingStyle: "To the point, no frills",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );
