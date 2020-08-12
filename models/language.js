@@ -32,21 +32,3 @@ module.exports = (sequelize, DataTypes) => {
   );
   return language;
 };
-
-//language.belon...
-// this.belongsToMany(models.language, {
-//   through: "translationSkill",
-//   foreignKey: "originalLanguageId",
-//   as: "original"
-// })
-
-// this.belongsToMany(models.language, {
-//   through: "translationSkill",
-//   foreignKey: "nativeLanguageId",
-//   as: "native"
-// })
-
-// translationSkill.belongsToMany(models.translationSkill, {
-//   through: "profileTranslationSkills",
-//   foreignKey: "profileId",
-// });
