@@ -1,4 +1,4 @@
-## :black_nib: Tone of Voice :black_nib:
+## :black_nib: Tone of Choice :black_nib:
 
 ### About the app 
 
