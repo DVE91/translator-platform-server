@@ -3,6 +3,7 @@
 ### About the app 
 
 :eyes: [You can find the deployed version of this project here](https://naughty-lumiere-bdfc94.netlify.app/) :eyes:
+
 If you want to try it out, check out [installments and demo's on the client side](https://github.com/DVE91/translator-platform-client).
 
 Sometimes you need a translation that takes into account specific culture references, or needs to convey a certain sentiment to its reader.
