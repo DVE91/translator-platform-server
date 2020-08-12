@@ -2,9 +2,8 @@
 
 ### About the app 
 
-If you want to try it out, check out [this section](#how-to-use-and-intall-this-app) that takes you through the process.
-
 :eyes: [You can find the deployed version of this project here](https://naughty-lumiere-bdfc94.netlify.app/) :eyes:
+If you want to try it out, check out [installments and demo's on the client side](https://github.com/DVE91/translator-platform-client).
 
 Sometimes you need a translation that takes into account specific culture references, or needs to convey a certain sentiment to its reader.
 To avoid embarrassing mistakes, you need someone that can transcreate, not just translate, communications aligned with your brand. 
