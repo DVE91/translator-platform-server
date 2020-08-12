@@ -25,10 +25,14 @@ It provides a quick and easy order system for translations, and a nice dashboard
 :ballot_box_with_check: [Client repo](#client-repo)
 
 #### Endpoints
-TO DO 
+Endpoints are divided into three categories:
+1. Authorised (e.g. login, sign-up)
+2. Translation order (e.g. all languages, suitable translator profiles)
+3. User (e.g. personal finances, personal availability)
 
 #### Demo
-TO DO
+![heroku endpoint demo](heroku.gif)
+
 
 #### Technologies
 Click to see project examples!
